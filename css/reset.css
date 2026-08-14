@@ -46,8 +46,19 @@ select {
 }
 
 /* Buttons */
+
 button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
   cursor: pointer;
+  outline: none;
+  -webkit-appearance: none; /* Removes iOS/Safari native styling */
+  -moz-appearance: none; /* Removes Firefox native styling */
+  appearance: none;
 }
 
 /* Text */
