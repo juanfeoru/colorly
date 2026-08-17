@@ -33,11 +33,19 @@ export function rgbToHsl(color) {
   }
 
   h /= 6;
-  h = (h + 1) % 1
+  h = (h + 1) % 1;
 
   return {
     h: Math.round(h * 360),
     s: Math.round(s * 100),
     l: Math.round(l * 100),
   };
+}
+
+export function rgbToString(color) {
+  return `rgb(${color.r}, ${color.g}, ${color.b})`;
+}
+
+export function hslToString(color) {
+  return `hsl(${color.h}, ${color.s}%, ${color.l}%)`;
 }
