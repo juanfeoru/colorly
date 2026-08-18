@@ -11,27 +11,32 @@ const colorDisplay = document.querySelector(".color-generator__swatch");
 const colorValue = document.querySelector(".color-generator__hex");
 const formatButtons = document.querySelectorAll(".color-generator__format");
 
-let currentColor = null;
+let initialColor = {
+  r: 79,
+  g: 32,
+  b: 250,
+};
+let currentColor = initialColor;
 let currentFormat = "hex";
+
+const formatters = {
+  hex: rgbToHex,
+  rgb: rgbToString,
+  hsl: (color) => hslToString(rgbToHsl(color)),
+};
 
 function updateColor() {
   currentColor = generateRandomColor();
 
-  const hex = rgbToHex(currentColor);
-
-  colorDisplay.style.background = hex;
+  colorDisplay.style.background = rgbToHex(currentColor);
 
   updateColorValue();
 }
 
 function updateColorValue() {
-  if (currentFormat === "hex") {
-    colorValue.textContent = rgbToHex(currentColor);
-  } else if (currentFormat === "rgb") {
-    colorValue.textContent = rgbToString(currentColor);
-  } else if (currentFormat === "hsl") {
-    colorValue.textContent = hslToString(rgbToHsl(currentColor));
-  }
+  const formatter = formatters[currentFormat];
+
+  colorValue.textContent = formatter(currentColor);
 }
 
 function setActiveFormat(selectedButton) {
