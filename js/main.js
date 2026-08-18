@@ -12,6 +12,7 @@ const colorValue = document.querySelector(".color-generator__hex");
 const formatButtons = document.querySelectorAll(".color-generator__format");
 
 let currentColor = null;
+let currentFormat = "hex";
 
 function updateColor() {
   currentColor = generateRandomColor();
@@ -19,7 +20,18 @@ function updateColor() {
   const hex = rgbToHex(currentColor);
 
   colorDisplay.style.background = hex;
-  colorValue.textContent = hex;
+
+  updateColorValue();
+}
+
+function updateColorValue() {
+  if (currentFormat === "hex") {
+    colorValue.textContent = rgbToHex(currentColor);
+  } else if (currentFormat === "rgb") {
+    colorValue.textContent = rgbToString(currentColor);
+  } else if (currentFormat === "hsl") {
+    colorValue.textContent = hslToString(rgbToHsl(currentColor));
+  }
 }
 
 function setActiveFormat(selectedButton) {
@@ -32,17 +44,10 @@ function setActiveFormat(selectedButton) {
 
 formatButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const format = button.dataset.format;
+    currentFormat = button.dataset.format;
 
     setActiveFormat(button);
-
-    if (format === "hex") {
-      colorValue.textContent = rgbToHex(currentColor);
-    } else if (format === "rgb") {
-      colorValue.textContent = rgbToString(currentColor);
-    } else if (format === "hsl") {
-      colorValue.textContent = hslToString(rgbToHsl(currentColor));
-    }
+    updateColorValue();
   });
 });
 
