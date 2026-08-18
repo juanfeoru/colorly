@@ -11,10 +11,17 @@ const colorDisplay = document.querySelector(".color-generator__swatch");
 const colorValue = document.querySelector(".color-generator__hex");
 const formatButtons = document.querySelectorAll(".color-generator__format");
 
+const channelValues = document.querySelectorAll(
+  ".color-generator__channel-value",
+);
+const channelProgress = document.querySelectorAll(
+  ".color-generator__channel-progress",
+);
+
 let initialColor = {
-  r: 79,
-  g: 32,
-  b: 250,
+  r: 255,
+  g: 87,
+  b: 51,
 };
 let currentColor = initialColor;
 let currentFormat = "hex";
@@ -28,9 +35,13 @@ const formatters = {
 function updateColor() {
   currentColor = generateRandomColor();
 
-  colorDisplay.style.background = rgbToHex(currentColor);
+  updateUI();
+}
 
+function updateUI() {
+  colorDisplay.style.background = rgbToHex(currentColor);
   updateColorValue();
+  updateRgbChannels();
 }
 
 function updateColorValue() {
@@ -47,6 +58,26 @@ function setActiveFormat(selectedButton) {
   selectedButton.classList.add("color-generator__format--active");
 }
 
+function updateRgbChannels() {
+  const channels = {
+    red: currentColor.r,
+    green: currentColor.g,
+    blue: currentColor.b,
+  };
+
+  channelValues.forEach((element) => {
+    const channel = element.dataset.channel;
+    element.textContent = channels[channel];
+  });
+
+  channelProgress.forEach((element) => {
+    const channel = element.dataset.channel;
+    const percentage = Math.round((channels[channel] / 255) * 100);
+
+    element.style.width = `${percentage}%`;
+  });
+}
+
 formatButtons.forEach((button) => {
   button.addEventListener("click", () => {
     currentFormat = button.dataset.format;
@@ -57,3 +88,5 @@ formatButtons.forEach((button) => {
 });
 
 generateButton.addEventListener("click", updateColor);
+
+updateUI();
