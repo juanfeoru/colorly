@@ -12,6 +12,9 @@ const colorValue = document.querySelector(".color-generator__hex");
 const formatButtons = document.querySelectorAll(".color-generator__format");
 const historyList = document.querySelector(".color-history__list");
 const historyClear = document.querySelector(".color-history__clear");
+const buttonCopy = document.querySelector(".color-generator__copy");
+const copyMessage = document.querySelector(".color-generator__hint");
+const toast = document.querySelector(".toast");
 
 const channelValues = document.querySelectorAll(
   ".color-generator__channel-value",
@@ -87,9 +90,13 @@ function updateUI() {
 }
 
 function updateColorValue() {
+  colorValue.textContent = getCurrentColorValue();
+}
+
+function getCurrentColorValue() {
   const formatter = formatters[currentFormat];
 
-  colorValue.textContent = formatter(currentColor);
+  return formatter(currentColor);
 }
 
 function addToHistory(color) {
@@ -101,6 +108,32 @@ function addToHistory(color) {
   if (colorHistory.length > MAX_HISTORY) {
     colorHistory.pop();
   }
+}
+
+async function copyColor() {
+  const color = getCurrentColorValue();
+
+  try {
+    await navigator.clipboard.writeText(color);
+
+    copyMessage.textContent = "Copied!";
+
+    setTimeout(() => {
+      copyMessage.textContent = "Click to copy code";
+    }, 1500);
+
+    showToast();
+  } catch (error) {
+    console.error("Failed to copy color:", color);
+  }
+}
+
+function showToast() {
+  toast.classList.add("toast--visible");
+
+  setTimeout(() => {
+    toast.classList.remove("toast--visible");
+  }, 1500);
 }
 
 function setActiveFormat(selectedButton) {
@@ -149,5 +182,7 @@ formatButtons.forEach((button) => {
 historyClear.addEventListener("click", clearHistory);
 
 generateButton.addEventListener("click", updateColor);
+
+buttonCopy.addEventListener("click", copyColor);
 
 updateUI();
