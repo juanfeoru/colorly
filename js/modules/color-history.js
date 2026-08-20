@@ -21,6 +21,7 @@ function createHistoryItem(item) {
   const button = document.createElement("button");
   button.classList.add("color-history__item");
   button.type = "button";
+  button.dataset.color = JSON.stringify(item.color);
 
   const swatch = document.createElement("div");
   swatch.classList.add("color-history__swatch");

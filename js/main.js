@@ -128,8 +128,19 @@ function handleClearHistory() {
   renderHistory(state.colorHistory, historyList);
 }
 
+function selectHistoryColor(event) {
+  const button = event.target.closest(".color-history__item");
+
+  if (!button) return;
+
+  state.currentColor = JSON.parse(button.dataset.color);
+
+  updateUI();
+}
+
 historyClear.addEventListener("click", handleClearHistory);
 
+historyList.addEventListener("click", selectHistoryColor);
 generateButton.addEventListener("click", updateColor);
 
 copyButton.addEventListener("click", copyColor);
