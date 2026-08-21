@@ -1,16 +1,21 @@
+import { state } from "./state.js";
+
+import { generateRandomColor } from "./modules/color-generator.js";
+
 import {
   rgbToHex,
   rgbToHsl,
   rgbToString,
   hslToString,
 } from "./modules/color-converter.js";
-import { generateRandomColor } from "./modules/color-generator.js";
+
 import {
   addToHistory,
   clearHistory,
   renderHistory,
 } from "./modules/color-history.js";
-import { state } from "./state.js";
+
+import { loadHistory, saveHistory } from "./modules/storage.js";
 
 const generateButton = document.querySelector(".color-generator__generate");
 const colorDisplay = document.querySelector(".color-generator__swatch");
@@ -35,10 +40,11 @@ const formatters = {
   hsl: (color) => hslToString(rgbToHsl(color)),
 };
 
-function updateColor() {
+function handleGenerateColor() {
   state.currentColor = generateRandomColor();
 
   addToHistory(state.colorHistory, state.currentColor, state.maxHistory);
+  saveHistory(state.colorHistory);
 
   updateUI();
   renderHistory(state.colorHistory, historyList);
@@ -125,10 +131,11 @@ formatButtons.forEach((button) => {
 
 function handleClearHistory() {
   clearHistory(state.colorHistory);
+  saveHistory(state.colorHistory);
   renderHistory(state.colorHistory, historyList);
 }
 
-function selectHistoryColor(event) {
+function handleHistorySelection(event) {
   const button = event.target.closest(".color-history__item");
 
   if (!button) return;
@@ -140,9 +147,13 @@ function selectHistoryColor(event) {
 
 historyClear.addEventListener("click", handleClearHistory);
 
-historyList.addEventListener("click", selectHistoryColor);
-generateButton.addEventListener("click", updateColor);
+historyList.addEventListener("click", handleHistorySelection);
+
+generateButton.addEventListener("click", handleGenerateColor);
 
 copyButton.addEventListener("click", copyColor);
 
+state.colorHistory.push(...loadHistory());
+
 updateUI();
+renderHistory(state.colorHistory, historyList);
