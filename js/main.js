@@ -37,6 +37,7 @@ const paletteCodes = document.querySelectorAll(".palette-generator__value");
 const paletteGenerateButton = document.querySelector(
   ".palette-generator__generate",
 );
+const paletteColors = document.querySelectorAll(".palette-generator__color");
 
 const channelValues = document.querySelectorAll(
   ".color-generator__channel-value",
@@ -85,22 +86,26 @@ function getCurrentColorValue() {
   return formatter(state.currentColor);
 }
 
-async function copyColor() {
-  const color = getCurrentColorValue();
-
+async function copyToClipboard(color) {
   try {
     await navigator.clipboard.writeText(color);
-
-    copyMessage.textContent = "Copied!";
-
-    setTimeout(() => {
-      copyMessage.textContent = "Click to copy code";
-    }, 1500);
 
     showToast();
   } catch (error) {
     console.error("Failed to copy color:", color);
   }
+}
+
+async function copyColor() {
+  const color = getCurrentColorValue();
+
+  await copyToClipboard(color);
+
+  copyMessage.textContent = "Copied!";
+
+  setTimeout(() => {
+    copyMessage.textContent = "Click to copy code";
+  }, 1500);
 }
 
 function showToast() {
@@ -109,6 +114,16 @@ function showToast() {
   setTimeout(() => {
     toast.classList.remove("toast--visible");
   }, 1500);
+}
+
+async function copyPaletteColor(event) {
+  const button = event.target.closest(".palette-generator__color");
+
+  if (!button) return;
+
+  const color = button.dataset.color;
+
+  await copyToClipboard(color);
 }
 
 function setActiveFormat(selectedButton) {
@@ -168,6 +183,8 @@ function updatePalette(palette) {
   palette.forEach((color, index) => {
     const hex = rgbToHex(color);
 
+    paletteColors[index].dataset.color = hex;
+
     paletteSwatches[index].style.backgroundColor = hex;
     paletteCodes[index].textContent = hex.toUpperCase();
   });
@@ -195,6 +212,10 @@ generateButton.addEventListener("click", handleGenerateColor);
 copyButton.addEventListener("click", copyColor);
 
 paletteGenerateButton.addEventListener("click", handleGeneratePalette);
+
+paletteColors.forEach((button) => {
+  button.addEventListener("click", copyPaletteColor);
+});
 
 state.colorHistory.push(...loadHistory());
 
