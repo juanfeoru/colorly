@@ -17,7 +17,10 @@ import {
 
 import { loadHistory, saveHistory } from "./modules/storage.js";
 
-import { generateMonochromaticPalette } from "./modules/palette-generator.js";
+import {
+  generateComplementaryPalette,
+  generateMonochromaticPalette,
+} from "./modules/palette-generator.js";
 
 const generateButton = document.querySelector(".color-generator__generate");
 const colorDisplay = document.querySelector(".color-generator__swatch");
@@ -41,10 +44,17 @@ const channelProgress = document.querySelectorAll(
   ".color-generator__channel-progress",
 );
 
+const paletteType = document.getElementById("palette-type");
+
 const formatters = {
   hex: rgbToHex,
   rgb: rgbToString,
   hsl: (color) => hslToString(rgbToHsl(color)),
+};
+
+const paletteGenerators = {
+  monochromatic: generateMonochromaticPalette,
+  complementary: generateComplementaryPalette,
 };
 
 function handleGenerateColor() {
@@ -162,7 +172,14 @@ function updatePalette(palette) {
 }
 
 function handleGeneratePalette() {
-  const palette = generateMonochromaticPalette(state.currentColor);
+  const type = paletteType.value;
+  const generator = paletteGenerators[type];
+
+  console.log(type);
+
+  if (!generator) return;
+
+  const palette = generator(state.currentColor);
 
   updatePalette(palette);
 }

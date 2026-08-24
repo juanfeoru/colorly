@@ -16,3 +16,39 @@ export function generateMonochromaticPalette(color) {
 
   return palette;
 }
+
+export function generateComplementaryPalette(color) {
+  const hsl = rgbToHsl(color);
+
+  const complementaryHue = (hsl.h + 180) % 360;
+
+  const colors = [
+    {
+      h: hsl.h,
+      s: hsl.s,
+      l: Math.max(hsl.l - 15, 10),
+    },
+    {
+      h: hsl.h,
+      s: hsl.s,
+      l: hsl.l,
+    },
+    {
+      h: complementaryHue,
+      s: hsl.s,
+      l: hsl.l,
+    },
+    {
+      h: complementaryHue,
+      s: hsl.s,
+      l: Math.min(hsl.l + 15, 90),
+    },
+    {
+      h: complementaryHue,
+      s: hsl.s,
+      l: Math.min(hsl.l + 30, 95),
+    },
+  ];
+
+  return colors.map(hslToRgb);
+}
