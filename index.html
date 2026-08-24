@@ -193,8 +193,8 @@
       <section class="color-history">
         <header class="color-history__header">
           <div class="color-history__heading">
-            <h2 class="color-history__title">Recent Colors</h2>
-            <p class="color-history__description">
+            <h2 class="color-history__title title">Recent Colors</h2>
+            <p class="color-history__description description">
               History of generated palettes
             </p>
           </div>
@@ -215,6 +215,65 @@
         </header>
 
         <div class="color-history__list"></div>
+      </section>
+
+      <section class="palette-generator">
+        <header class="palette-generator__header">
+          <div class="palette-generator__heading">
+            <h2 class="palette-generator__title title">Color Palette</h2>
+            <p class="palette-generator__description description">
+              Create a palette based on your current color
+            </p>
+          </div>
+        </header>
+
+        <div class="palette-generator__controls">
+          <div class="palette-generator__select">
+            <label for="palette-type">Palette type</label>
+
+            <select id="palette-type">
+              <option value="monochromatic">Monochromatic</option>
+              <option value="analogous">Analogous</option>
+              <option value="complementary">Complementary</option>
+            </select>
+          </div>
+
+          <button type="button" class="palette-generator__generate">
+            Generate Palette
+          </button>
+        </div>
+
+        <div class="palette-generator__colors">
+          <button type="button" class="palette-generator__color">
+            <span class="palette-generator__swatch" aria-hidden="true"></span>
+
+            <span class="palette-generator__value"></span>
+          </button>
+
+          <button class="palette-generator__color" type="button">
+            <span class="palette-generator__swatch" aria-hidden="true"></span>
+
+            <span class="palette-generator__value"></span>
+          </button>
+
+          <button class="palette-generator__color" type="button">
+            <span class="palette-generator__swatch" aria-hidden="true"></span>
+
+            <span class="palette-generator__value"></span>
+          </button>
+
+          <button class="palette-generator__color" type="button">
+            <span class="palette-generator__swatch" aria-hidden="true"></span>
+
+            <span class="palette-generator__value"></span>
+          </button>
+
+          <button class="palette-generator__color" type="button">
+            <span class="palette-generator__swatch" aria-hidden="true"></span>
+
+            <span class="palette-generator__value"></span>
+          </button>
+        </div>
       </section>
     </main>
 

@@ -17,6 +17,8 @@ import {
 
 import { loadHistory, saveHistory } from "./modules/storage.js";
 
+import { generateMonochromaticPalette } from "./modules/palette-generator.js";
+
 const generateButton = document.querySelector(".color-generator__generate");
 const colorDisplay = document.querySelector(".color-generator__swatch");
 const colorValue = document.querySelector(".color-generator__hex");
@@ -26,6 +28,11 @@ const historyClear = document.querySelector(".color-history__clear");
 const copyButton = document.querySelector(".color-generator__copy");
 const copyMessage = document.querySelector(".color-generator__hint");
 const toast = document.querySelector(".toast");
+const paletteSwatches = document.querySelectorAll(".palette-generator__swatch");
+const paletteCodes = document.querySelectorAll(".palette-generator__value");
+const paletteGenerateButton = document.querySelector(
+  ".palette-generator__generate",
+);
 
 const channelValues = document.querySelectorAll(
   ".color-generator__channel-value",
@@ -145,6 +152,21 @@ function handleHistorySelection(event) {
   updateUI();
 }
 
+function updatePalette(palette) {
+  palette.forEach((color, index) => {
+    const hex = rgbToHex(color);
+
+    paletteSwatches[index].style.backgroundColor = hex;
+    paletteCodes[index].textContent = hex.toUpperCase();
+  });
+}
+
+function handleGeneratePalette() {
+  const palette = generateMonochromaticPalette(state.currentColor);
+
+  updatePalette(palette);
+}
+
 historyClear.addEventListener("click", handleClearHistory);
 
 historyList.addEventListener("click", handleHistorySelection);
@@ -153,7 +175,10 @@ generateButton.addEventListener("click", handleGenerateColor);
 
 copyButton.addEventListener("click", copyColor);
 
+paletteGenerateButton.addEventListener("click", handleGeneratePalette);
+
 state.colorHistory.push(...loadHistory());
 
 updateUI();
 renderHistory(state.colorHistory, historyList);
+handleGeneratePalette();
