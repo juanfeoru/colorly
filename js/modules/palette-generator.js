@@ -52,3 +52,21 @@ export function generateComplementaryPalette(color) {
 
   return colors.map(hslToRgb);
 }
+
+export function generateAnalogousPalette(color) {
+  const hsl = rgbToHsl(color);
+
+  const hues = [hsl.h - 60, hsl.h - 30, hsl.h, hsl.h + 30, hsl.h + 60];
+
+  const colors = hues.map((hue) => {
+    return {
+      h: (hue + 360) % 360,
+      s: hsl.s,
+      l: hsl.l,
+    };
+  });
+
+  return colors.map((color) => {
+    return hslToRgb(color);
+  });
+}

@@ -20,6 +20,7 @@ import { loadHistory, saveHistory } from "./modules/storage.js";
 import {
   generateComplementaryPalette,
   generateMonochromaticPalette,
+  generateAnalogousPalette,
 } from "./modules/palette-generator.js";
 
 const generateButton = document.querySelector(".color-generator__generate");
@@ -55,6 +56,7 @@ const formatters = {
 const paletteGenerators = {
   monochromatic: generateMonochromaticPalette,
   complementary: generateComplementaryPalette,
+  analogous: generateAnalogousPalette,
 };
 
 function handleGenerateColor() {
