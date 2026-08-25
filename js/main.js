@@ -15,7 +15,12 @@ import {
   renderHistory,
 } from "./modules/color-history.js";
 
-import { loadHistory, saveHistory } from "./modules/storage.js";
+import {
+  loadHistory,
+  saveHistory,
+  loadFavorites,
+  saveFavorites,
+} from "./modules/storage.js";
 
 import {
   generateComplementaryPalette,
@@ -23,12 +28,21 @@ import {
   generateAnalogousPalette,
 } from "./modules/palette-generator.js";
 
+import {
+  addFavorite,
+  removeFavorite,
+  isFavorite,
+  renderFavorites,
+  clearFavorites,
+} from "./modules/favorites.js";
+
 const generateButton = document.querySelector(".color-generator__generate");
 const colorDisplay = document.querySelector(".color-generator__swatch");
 const colorValue = document.querySelector(".color-generator__hex");
 const formatButtons = document.querySelectorAll(".color-generator__format");
-const historyList = document.querySelector(".color-history__list");
-const historyClear = document.querySelector(".color-history__clear");
+const historyList = document.getElementById("color-history__list");
+const historyClear = document.getElementById("color-history__clear");
+const favoritesClear = document.getElementById("color-favorites__clear");
 const copyButton = document.querySelector(".color-generator__copy");
 const copyMessage = document.querySelector(".color-generator__hint");
 const toast = document.querySelector(".toast");
@@ -38,6 +52,8 @@ const paletteGenerateButton = document.querySelector(
   ".palette-generator__generate",
 );
 const paletteColors = document.querySelectorAll(".palette-generator__color");
+const favoriteButton = document.querySelector(".color-generator__favorite");
+const favoritesList = document.getElementById("color-favorites__list");
 
 const channelValues = document.querySelectorAll(
   ".color-generator__channel-value",
@@ -74,6 +90,7 @@ function updateUI() {
   colorDisplay.style.background = rgbToHex(state.currentColor);
   updateColorValue();
   updateRgbChannels();
+  updateFavoriteButton();
 }
 
 function updateColorValue() {
@@ -90,7 +107,7 @@ async function copyToClipboard(color) {
   try {
     await navigator.clipboard.writeText(color);
 
-    showToast();
+    showToast("Color copied to clipboard!");
   } catch (error) {
     console.error("Failed to copy color:", color);
   }
@@ -108,7 +125,8 @@ async function copyColor() {
   }, 1500);
 }
 
-function showToast() {
+function showToast(message) {
+  toast.textContent = message;
   toast.classList.add("toast--visible");
 
   setTimeout(() => {
@@ -167,6 +185,7 @@ function handleClearHistory() {
   clearHistory(state.colorHistory);
   saveHistory(state.colorHistory);
   renderHistory(state.colorHistory, historyList);
+  updateFavoriteButton();
 }
 
 function handleHistorySelection(event) {
@@ -177,6 +196,7 @@ function handleHistorySelection(event) {
   state.currentColor = JSON.parse(button.dataset.color);
 
   updateUI();
+  handleGeneratePalette();
 }
 
 function updatePalette(palette) {
@@ -194,13 +214,68 @@ function handleGeneratePalette() {
   const type = paletteType.value;
   const generator = paletteGenerators[type];
 
-  console.log(type);
-
   if (!generator) return;
 
   const palette = generator(state.currentColor);
 
   updatePalette(palette);
+}
+
+function handleToggleFavorite() {
+  if (isFavorite(state.favoriteColors, state.currentColor)) {
+    removeFavorite(state.favoriteColors, state.currentColor);
+  } else {
+    const added = addFavorite(
+      state.favoriteColors,
+      state.currentColor,
+      state.maxFavorites,
+    );
+
+    if (!added) {
+      showFavoriteLimitMessage();
+      return;
+    }
+  }
+
+  saveFavorites(state.favoriteColors);
+  updateFavoriteButton();
+  renderFavorites(state.favoriteColors, favoritesList);
+}
+
+function updateFavoriteButton() {
+  const favorite = isFavorite(state.favoriteColors, state.currentColor);
+
+  const limitReached = state.favoriteColors >= state.maxFavorites;
+
+  favoriteButton.setAttribute("aria-pressed", favorite);
+
+  favoriteButton.setAttribute(
+    "aria-label",
+    favorite ? "Remove color from favorites" : "Add color to favorites",
+  );
+
+  favoriteButton.disabled = !favorite && limitReached;
+}
+
+function handleFavoriteSelection(event) {
+  const button = event.target.closest(".color-favorites__item");
+
+  if (!button) return;
+
+  state.currentColor = JSON.parse(button.dataset.color);
+
+  updateUI();
+  handleGeneratePalette();
+}
+
+function handleClearFavorites() {
+  clearFavorites(state.favoriteColors);
+  saveFavorites(state.favoriteColors);
+  renderFavorites(state.favoriteColors, favoritesList);
+}
+
+function showFavoriteLimitMessage() {
+  showToast(`Maximum of ${state.maxFavorites} favorite colors reached.`);
 }
 
 historyClear.addEventListener("click", handleClearHistory);
@@ -217,8 +292,17 @@ paletteColors.forEach((button) => {
   button.addEventListener("click", copyPaletteColor);
 });
 
+favoriteButton.addEventListener("click", handleToggleFavorite);
+
+favoritesClear.addEventListener("click", handleClearFavorites);
+
+favoritesList.addEventListener("click", handleFavoriteSelection);
+
 state.colorHistory.push(...loadHistory());
+state.favoriteColors.push(...loadFavorites());
 
 updateUI();
 renderHistory(state.colorHistory, historyList);
+renderFavorites(state.favoriteColors, favoritesList);
+
 handleGeneratePalette();

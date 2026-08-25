@@ -124,10 +124,34 @@
   text-align: center;
 }
 
-.color-generator__copy {
-  fill: rgb(255 255 255 / 50%);
-  flex-shrink: 0;
-  transition: fill 150ms;
+.color-generator__copy,
+.color-generator__favorite {
+  color: #b8c4b4;
+  transition: color 150ms ease;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: currentColor;
+  }
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.color-generator__favorite .favorite-icon {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.color-generator__favorite[aria-pressed="true"] {
+  color: var(--color-primary);
+}
+
+.color-generator__favorite[aria-pressed="true"] .favorite-icon {
+  fill: currentColor;
 }
 
 .color-generator__hint {
@@ -257,7 +281,8 @@
   }
 }
 
-.color-history {
+.color-history,
+.color-favorites {
   width: 100%;
   max-width: 50rem;
   display: flex;
@@ -266,13 +291,13 @@
   margin-top: 2rem;
 }
 
-.color-history__header {
+.color-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.title {
+.section-title {
   font-size: var(--font-size-xl);
   font-weight: 700;
 
@@ -281,7 +306,7 @@
   }
 }
 
-.description {
+.section-description {
   color: rgb(255 255 255 / 50%);
   font-size: 0.7rem;
 
@@ -290,7 +315,7 @@
   }
 }
 
-.color-history__clear {
+.color-clear {
   color: var(--color-primary);
   font-size: var(--font-size-sm);
   font-weight: 700;
@@ -324,7 +349,7 @@
   }
 }
 
-.color-history__list {
+.color-card__list {
   display: grid;
   gap: 1rem;
 
@@ -337,7 +362,7 @@
   }
 }
 
-.color-history__item {
+.color-card {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -353,7 +378,7 @@
     background-color: rgb(255 255 255 / 5%);
     transform: scale(1.02);
 
-    .color-history__code {
+    .color-card__code {
       color: var(--color-primary);
     }
   }
@@ -363,7 +388,7 @@
   }
 }
 
-.color-history__swatch {
+.color-card__swatch {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 9999px;
@@ -376,17 +401,17 @@
   }
 }
 
-.color-history__info {
+.color-card__info {
   display: flex;
   flex-direction: column;
 }
 
-.color-history__code {
+.color-card__code {
   color: white;
   font-weight: 700;
 }
 
-.color-history__time {
+.color-card__time {
   font-size: 0.75rem;
   color: rgb(255 255 255 / 40%);
 }
