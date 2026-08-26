@@ -70,3 +70,30 @@ export function generateAnalogousPalette(color) {
     return hslToRgb(color);
   });
 }
+
+export function generateShades(color) {
+  const shades = [];
+
+  const lighten = [0.2, 0.4];
+  const darken = [0.2, 0.4];
+
+  lighten.forEach((amount) => {
+    shades.push({
+      r: Math.round(color.r + (255 - color.r) * amount),
+      g: Math.round(color.g + (255 - color.g) * amount),
+      b: Math.round(color.b + (255 - color.b) * amount),
+    });
+  });
+
+  shades.push({ ...color });
+
+  darken.forEach((amount) => {
+    shades.push({
+      r: Math.round(color.r * (1 - amount)),
+      g: Math.round(color.g * (1 - amount)),
+      b: Math.round(color.b * (1 - amount)),
+    });
+  });
+
+  return shades;
+}

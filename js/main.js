@@ -28,6 +28,7 @@ import {
   generateComplementaryPalette,
   generateMonochromaticPalette,
   generateAnalogousPalette,
+  generateShades,
 } from "./modules/palette-generator.js";
 
 import {
@@ -63,6 +64,7 @@ const paletteGenerators = {
   monochromatic: generateMonochromaticPalette,
   complementary: generateComplementaryPalette,
   analogous: generateAnalogousPalette,
+  shades: generateShades,
 };
 
 function updateUI() {
@@ -236,5 +238,7 @@ state.favoriteColors.push(...loadFavorites());
 updateUI();
 renderHistory(state.colorHistory, elements.historyList);
 renderFavorites(state.favoriteColors, elements.favoritesList);
+
+console.log(generateShades(state.currentColor));
 
 handleGeneratePalette();
