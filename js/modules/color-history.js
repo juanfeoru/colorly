@@ -55,3 +55,11 @@ export function renderHistory(history, historyList) {
     historyList.append(createHistoryItem(item));
   });
 }
+
+export function getHistoryColor(event) {
+  const button = event.target.closest(".color-history__item");
+
+  if (!button) return null;
+
+  return JSON.parse(button.dataset.color);
+}

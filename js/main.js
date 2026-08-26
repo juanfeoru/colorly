@@ -2,17 +2,19 @@ import { state } from "./state.js";
 
 import { generateRandomColor } from "./modules/color-generator.js";
 
-import {
-  rgbToHex,
-  rgbToHsl,
-  rgbToString,
-  hslToString,
-} from "./modules/color-converter.js";
+import { updatePalette } from "./modules/palette-ui.js";
+
+import { copyToClipboard } from "./modules/clipboard.js";
+
+import { showToast } from "./modules/toast.js";
+
+import { elements } from "./modules/dom.js";
 
 import {
   addToHistory,
   clearHistory,
   renderHistory,
+  getHistoryColor,
 } from "./modules/color-history.js";
 
 import {
@@ -34,40 +36,27 @@ import {
   isFavorite,
   renderFavorites,
   clearFavorites,
+  updateFavoriteButton,
+  getFavoriteColor,
 } from "./modules/favorites.js";
 
-const generateButton = document.querySelector(".color-generator__generate");
-const colorDisplay = document.querySelector(".color-generator__swatch");
-const colorValue = document.querySelector(".color-generator__hex");
-const formatButtons = document.querySelectorAll(".color-generator__format");
-const historyList = document.getElementById("color-history__list");
-const historyClear = document.getElementById("color-history__clear");
-const favoritesClear = document.getElementById("color-favorites__clear");
-const copyButton = document.querySelector(".color-generator__copy");
-const copyMessage = document.querySelector(".color-generator__hint");
-const toast = document.querySelector(".toast");
-const paletteSwatches = document.querySelectorAll(".palette-generator__swatch");
-const paletteCodes = document.querySelectorAll(".palette-generator__value");
-const paletteGenerateButton = document.querySelector(
-  ".palette-generator__generate",
-);
-const paletteColors = document.querySelectorAll(".palette-generator__color");
-const favoriteButton = document.querySelector(".color-generator__favorite");
-const favoritesList = document.getElementById("color-favorites__list");
+import {
+  updateColorUI,
+  getCurrentColorValue,
+  updateColorValue,
+} from "./modules/color-ui.js";
 
-const channelValues = document.querySelectorAll(
-  ".color-generator__channel-value",
-);
-const channelProgress = document.querySelectorAll(
-  ".color-generator__channel-progress",
-);
+const colorUI = {
+  colorDisplay: elements.colorDisplay,
+  colorValue: elements.colorValue,
+  channelValues: elements.channelValues,
+  channelProgress: elements.channelProgress,
+};
 
-const paletteType = document.getElementById("palette-type");
-
-const formatters = {
-  hex: rgbToHex,
-  rgb: rgbToString,
-  hsl: (color) => hslToString(rgbToHsl(color)),
+const paletteUI = {
+  colors: elements.paletteColors,
+  swatches: elements.paletteSwatches,
+  codes: elements.paletteCodes,
 };
 
 const paletteGenerators = {
@@ -76,6 +65,15 @@ const paletteGenerators = {
   analogous: generateAnalogousPalette,
 };
 
+function updateUI() {
+  updateColorUI(colorUI, state.currentColor, state.currentFormat);
+  updateFavoriteButton(
+    elements.favoriteButton,
+    state.favoriteColors,
+    state.currentColor,
+  );
+}
+
 function handleGenerateColor() {
   state.currentColor = generateRandomColor();
 
@@ -83,54 +81,22 @@ function handleGenerateColor() {
   saveHistory(state.colorHistory);
 
   updateUI();
-  renderHistory(state.colorHistory, historyList);
-}
-
-function updateUI() {
-  colorDisplay.style.background = rgbToHex(state.currentColor);
-  updateColorValue();
-  updateRgbChannels();
-  updateFavoriteButton();
-}
-
-function updateColorValue() {
-  colorValue.textContent = getCurrentColorValue();
-}
-
-function getCurrentColorValue() {
-  const formatter = formatters[state.currentFormat];
-
-  return formatter(state.currentColor);
-}
-
-async function copyToClipboard(color) {
-  try {
-    await navigator.clipboard.writeText(color);
-
-    showToast("Color copied to clipboard!");
-  } catch (error) {
-    console.error("Failed to copy color:", color);
-  }
+  renderHistory(state.colorHistory, elements.historyList);
 }
 
 async function copyColor() {
-  const color = getCurrentColorValue();
+  const color = getCurrentColorValue(state.currentColor, state.currentFormat);
 
-  await copyToClipboard(color);
+  const copied = await copyToClipboard(color);
 
-  copyMessage.textContent = "Copied!";
+  if (!copied) return;
 
-  setTimeout(() => {
-    copyMessage.textContent = "Click to copy code";
-  }, 1500);
-}
+  showToast(elements.toast, "Color copied to clipboard");
 
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add("toast--visible");
+  elements.copyMessage.textContent = "Copied!";
 
   setTimeout(() => {
-    toast.classList.remove("toast--visible");
+    elements.copyMessage.textContent = "Click to copy code";
   }, 1500);
 }
 
@@ -141,84 +107,60 @@ async function copyPaletteColor(event) {
 
   const color = button.dataset.color;
 
-  await copyToClipboard(color);
+  const copied = await copyToClipboard(color);
+
+  if (!copied) return;
+
+  showToast(elements.toast, "Color copied to clipboard");
 }
 
 function setActiveFormat(selectedButton) {
-  formatButtons.forEach((button) => {
+  elements.formatButtons.forEach((button) => {
     button.classList.remove("color-generator__format--active");
   });
 
   selectedButton.classList.add("color-generator__format--active");
 }
 
-function updateRgbChannels() {
-  const channels = {
-    red: state.currentColor.r,
-    green: state.currentColor.g,
-    blue: state.currentColor.b,
-  };
-
-  channelValues.forEach((element) => {
-    const channel = element.dataset.channel;
-    element.textContent = channels[channel];
-  });
-
-  channelProgress.forEach((element) => {
-    const channel = element.dataset.channel;
-    const percentage = Math.round((channels[channel] / 255) * 100);
-
-    element.style.width = `${percentage}%`;
-  });
-}
-
-formatButtons.forEach((button) => {
+elements.formatButtons.forEach((button) => {
   button.addEventListener("click", () => {
     state.currentFormat = button.dataset.format;
 
     setActiveFormat(button);
-    updateColorValue();
+    updateColorValue(
+      elements.colorValue,
+      state.currentColor,
+      state.currentFormat,
+    );
   });
 });
 
 function handleClearHistory() {
   clearHistory(state.colorHistory);
   saveHistory(state.colorHistory);
-  renderHistory(state.colorHistory, historyList);
-  updateFavoriteButton();
+  renderHistory(state.colorHistory, elements.historyList);
 }
 
 function handleHistorySelection(event) {
-  const button = event.target.closest(".color-history__item");
+  const color = getHistoryColor(event);
 
-  if (!button) return;
+  if (!color) return;
 
-  state.currentColor = JSON.parse(button.dataset.color);
+  state.currentColor = color;
 
   updateUI();
   handleGeneratePalette();
 }
 
-function updatePalette(palette) {
-  palette.forEach((color, index) => {
-    const hex = rgbToHex(color);
-
-    paletteColors[index].dataset.color = hex;
-
-    paletteSwatches[index].style.backgroundColor = hex;
-    paletteCodes[index].textContent = hex.toUpperCase();
-  });
-}
-
 function handleGeneratePalette() {
-  const type = paletteType.value;
+  const type = elements.paletteType.value;
   const generator = paletteGenerators[type];
 
   if (!generator) return;
 
   const palette = generator(state.currentColor);
 
-  updatePalette(palette);
+  updatePalette(paletteUI, palette);
 }
 
 function handleToggleFavorite() {
@@ -238,31 +180,20 @@ function handleToggleFavorite() {
   }
 
   saveFavorites(state.favoriteColors);
-  updateFavoriteButton();
-  renderFavorites(state.favoriteColors, favoritesList);
-}
-
-function updateFavoriteButton() {
-  const favorite = isFavorite(state.favoriteColors, state.currentColor);
-
-  const limitReached = state.favoriteColors >= state.maxFavorites;
-
-  favoriteButton.setAttribute("aria-pressed", favorite);
-
-  favoriteButton.setAttribute(
-    "aria-label",
-    favorite ? "Remove color from favorites" : "Add color to favorites",
+  updateFavoriteButton(
+    elements.favoriteButton,
+    state.favoriteColors,
+    state.currentColor,
   );
-
-  favoriteButton.disabled = !favorite && limitReached;
+  renderFavorites(state.favoriteColors, elements.favoritesList);
 }
 
 function handleFavoriteSelection(event) {
-  const button = event.target.closest(".color-favorites__item");
+  const color = getFavoriteColor(event);
 
-  if (!button) return;
+  if (!color) return;
 
-  state.currentColor = JSON.parse(button.dataset.color);
+  state.currentColor = color;
 
   updateUI();
   handleGeneratePalette();
@@ -271,38 +202,39 @@ function handleFavoriteSelection(event) {
 function handleClearFavorites() {
   clearFavorites(state.favoriteColors);
   saveFavorites(state.favoriteColors);
-  renderFavorites(state.favoriteColors, favoritesList);
+  renderFavorites(state.favoriteColors, elements.favoritesList);
 }
 
 function showFavoriteLimitMessage() {
-  showToast(`Maximum of ${state.maxFavorites} favorite colors reached.`);
+  showToast(
+    elements.toast,
+    `Maximum of ${state.maxFavorites} favorite colors reached.`,
+  );
 }
 
-historyClear.addEventListener("click", handleClearHistory);
+elements.historyClear.addEventListener("click", handleClearHistory);
 
-historyList.addEventListener("click", handleHistorySelection);
+elements.historyList.addEventListener("click", handleHistorySelection);
 
-generateButton.addEventListener("click", handleGenerateColor);
+elements.generateButton.addEventListener("click", handleGenerateColor);
 
-copyButton.addEventListener("click", copyColor);
+elements.copyButton.addEventListener("click", copyColor);
 
-paletteGenerateButton.addEventListener("click", handleGeneratePalette);
+elements.paletteGenerateButton.addEventListener("click", handleGeneratePalette);
 
-paletteColors.forEach((button) => {
-  button.addEventListener("click", copyPaletteColor);
-});
+elements.paletteColorsContainer.addEventListener("click", copyPaletteColor);
 
-favoriteButton.addEventListener("click", handleToggleFavorite);
+elements.favoriteButton.addEventListener("click", handleToggleFavorite);
 
-favoritesClear.addEventListener("click", handleClearFavorites);
+elements.favoritesClear.addEventListener("click", handleClearFavorites);
 
-favoritesList.addEventListener("click", handleFavoriteSelection);
+elements.favoritesList.addEventListener("click", handleFavoriteSelection);
 
 state.colorHistory.push(...loadHistory());
 state.favoriteColors.push(...loadFavorites());
 
 updateUI();
-renderHistory(state.colorHistory, historyList);
-renderFavorites(state.favoriteColors, favoritesList);
+renderHistory(state.colorHistory, elements.historyList);
+renderFavorites(state.favoriteColors, elements.favoritesList);
 
 handleGeneratePalette();

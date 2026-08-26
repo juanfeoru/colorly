@@ -1,3 +1,4 @@
+import { state } from "../state.js";
 import { rgbToHex } from "./color-converter.js";
 
 export function addFavorite(favorites, color, maxFavorites) {
@@ -67,4 +68,23 @@ export function renderFavorites(favorites, favoritesList) {
 
 export function clearFavorites(favorites) {
   favorites.length = 0;
+}
+
+export function updateFavoriteButton(button, favorites, color) {
+  const favorite = isFavorite(favorites, color);
+
+  button.setAttribute("aria-pressed", favorite);
+
+  button.setAttribute(
+    "aria-label",
+    favorite ? "Remove color from favorites" : "Add color to favorites",
+  );
+}
+
+export function getFavoriteColor(event) {
+  const button = event.target.closest(".color-favorites__item");
+
+  if (!button) return null;
+
+  return JSON.parse(button.dataset.color);
 }
