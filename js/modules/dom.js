@@ -33,4 +33,29 @@ export const elements = {
   paletteGenerateButton: document.querySelector(".palette-generator__generate"),
 
   paletteType: document.getElementById("palette-type"),
+
+  foregroundInput: document.getElementById("contrast-foreground"),
+  backgroundInput: document.getElementById("contrast-background"),
+
+  contrastForegroundValue: document.getElementById("contrast-foreground-value"),
+
+  contrastBackgroundValue: document.getElementById("contrast-background-value"),
+
+  contrastPreview: document.querySelector(".contrast-checker__preview-box"),
+
+  contrastPreviewLarge: document.querySelector(
+    ".contrast-checker__preview-large",
+  ),
+
+  contrastPreviewNormal: document.querySelector(
+    ".contrast-checker__preview-normal",
+  ),
+
+  contrastRatio: document.querySelector(".contrast-checker__ratio"),
+
+  contrastCriteria: document.querySelectorAll(
+    ".contrast-checker__criterion-status",
+  ),
+
+  criteria: document.querySelectorAll(".contrast-checker__criterion-status"),
 };

@@ -95,3 +95,13 @@ export function rgbToString(color) {
 export function hslToString(color) {
   return `hsl(${color.h}, ${color.s}%, ${color.l}%)`;
 }
+
+export function hexToRgb(hex) {
+  const value = hex.replace("#", "");
+
+  return {
+    r: parseInt(value.slice(0, 2), 16),
+    g: parseInt(value.slice(2, 4), 16),
+    b: parseInt(value.slice(4, 6), 16),
+  };
+}

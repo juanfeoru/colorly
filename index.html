@@ -262,8 +262,8 @@
       </section>
 
       <section class="palette-generator">
-        <header class="palette-generator__header">
-          <div class="palette-generator__heading">
+        <header class="color-header">
+          <div class="color-heading">
             <h2 class="section-title">Color Palette</h2>
             <p class="section-description">
               Create a palette based on your current color
@@ -398,6 +398,99 @@
               </svg>
             </span>
           </button>
+        </div>
+      </section>
+
+      <section class="contrast-checker">
+        <header class="color-header">
+          <div class="color-heading">
+            <h2 class="section-title">Contrast Checker</h2>
+            <p class="section-description">
+              Check the accesibility contrast between two colors
+            </p>
+          </div>
+        </header>
+
+        <div class="contrast-checker__colors">
+          <div class="contrast-checker__color">
+            <label for="contrast-foreground">Foreground</label>
+
+            <div class="contrast-checker__color-input">
+              <input type="color" id="contrast-foreground" value="#FF5733" />
+
+              <output
+                class="contrast-checker__color-value"
+                id="contrast-foreground-value"
+                >#FF5733</output
+              >
+            </div>
+          </div>
+
+          <div class="contrast-checker__color">
+            <label for="contrast-background">Background</label>
+
+            <div class="contrast-checker__color-input">
+              <input type="color" id="contrast-background" value="#FFFFFF" />
+
+              <output
+                class="contrast-checker__color-value"
+                id="contrast-background-value"
+                >#FFFFFF</output
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="contrast-checker__preview">
+          <span class="contrast-checker__preview-label">Preview</span>
+
+          <div class="contrast-checker__preview-box">
+            <span class="contrast-checker__preview-large">Large Text</span>
+
+            <span class="contrast-checker__preview-normal"
+              >Normal text preview</span
+            >
+          </div>
+        </div>
+
+        <div class="contrast-checker__result">
+          <span class="contrast-checker__result-label">Contrast Ratio</span>
+
+          <output class="contrast-checker__ratio" aria-live="polite"
+            >3.15:1</output
+          >
+        </div>
+
+        <div class="contrast-checker__wcag">
+          <div class="contrast-checker__criterion">
+            <span class="contrast-checker__criterion-name">AA Normal Text</span>
+
+            <span class="contrast-checker__criterion-status">—</span>
+          </div>
+
+          <div class="contrast-checker__criterion">
+            <span class="contrast-checker__criterion-name">
+              AA Large Text
+            </span>
+
+            <span class="contrast-checker__criterion-status"> — </span>
+          </div>
+
+          <div class="contrast-checker__criterion">
+            <span class="contrast-checker__criterion-name">
+              AAA Normal Text
+            </span>
+
+            <span class="contrast-checker__criterion-status"> — </span>
+          </div>
+
+          <div class="contrast-checker__criterion">
+            <span class="contrast-checker__criterion-name">
+              AAA Large Text
+            </span>
+
+            <span class="contrast-checker__criterion-status"> — </span>
+          </div>
         </div>
       </section>
     </main>

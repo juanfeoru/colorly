@@ -47,6 +47,10 @@ import {
   updateColorValue,
 } from "./modules/color-ui.js";
 
+import { checkWCAG, getContrastRatio } from "./modules/contrast.js";
+import { hexToRgb } from "./modules/color-converter.js";
+import { updateContrastUI } from "./modules/contrast-ui.js";
+
 const colorUI = {
   colorDisplay: elements.colorDisplay,
   colorValue: elements.colorValue,
@@ -214,6 +218,20 @@ function showFavoriteLimitMessage() {
   );
 }
 
+function updateContrast() {
+  const foreground = elements.foregroundInput.value;
+  const background = elements.backgroundInput.value;
+
+  const foregroundRgb = hexToRgb(foreground);
+  const backgroundRgb = hexToRgb(background);
+
+  const ratio = getContrastRatio(foregroundRgb, backgroundRgb);
+
+  const wcag = checkWCAG(ratio);
+
+  updateContrastUI(elements, foreground, background, ratio, wcag);
+}
+
 elements.historyClear.addEventListener("click", handleClearHistory);
 
 elements.historyList.addEventListener("click", handleHistorySelection);
@@ -232,13 +250,15 @@ elements.favoritesClear.addEventListener("click", handleClearFavorites);
 
 elements.favoritesList.addEventListener("click", handleFavoriteSelection);
 
+elements.foregroundInput.addEventListener("input", updateContrast);
+
+elements.backgroundInput.addEventListener("input", updateContrast);
+
 state.colorHistory.push(...loadHistory());
 state.favoriteColors.push(...loadFavorites());
 
 updateUI();
 renderHistory(state.colorHistory, elements.historyList);
 renderFavorites(state.favoriteColors, elements.favoritesList);
-
-console.log(generateShades(state.currentColor));
 
 handleGeneratePalette();
