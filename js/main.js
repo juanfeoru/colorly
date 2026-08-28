@@ -48,7 +48,7 @@ import {
 } from "./modules/color-ui.js";
 
 import { checkWCAG, getContrastRatio } from "./modules/contrast.js";
-import { hexToRgb } from "./modules/color-converter.js";
+import { hexToRgb, rgbToHex } from "./modules/color-converter.js";
 import { updateContrastUI } from "./modules/contrast-ui.js";
 
 const colorUI = {
@@ -233,6 +233,14 @@ function updateContrast() {
   updateContrastUI(elements, foreground, background, ratio, wcag);
 }
 
+function handleUseCurrentColor() {
+  const color = rgbToHex(state.currentColor);
+
+  elements.foregroundInput.value = color;
+
+  updateContrast();
+}
+
 function initilizeApp() {
   state.colorHistory.push(...loadHistory());
   state.favoriteColors.push(...loadFavorites());
@@ -266,5 +274,7 @@ elements.favoritesList.addEventListener("click", handleFavoriteSelection);
 elements.foregroundInput.addEventListener("input", updateContrast);
 
 elements.backgroundInput.addEventListener("input", updateContrast);
+
+elements.contrastUseCurrent.addEventListener("click", handleUseCurrentColor);
 
 initilizeApp();

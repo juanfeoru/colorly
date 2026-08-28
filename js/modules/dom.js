@@ -37,6 +37,8 @@ export const elements = {
   foregroundInput: document.getElementById("contrast-foreground"),
   backgroundInput: document.getElementById("contrast-background"),
 
+  contrastUseCurrent: document.querySelector(".contrast-checker__use-current"),
+
   contrastForegroundValue: document.getElementById("contrast-foreground-value"),
 
   contrastBackgroundValue: document.getElementById("contrast-background-value"),
