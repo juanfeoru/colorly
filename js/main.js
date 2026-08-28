@@ -241,6 +241,16 @@ function handleUseCurrentColor() {
   updateContrast();
 }
 
+function handleSwapContrastColors() {
+  const foreground = elements.foregroundInput.value;
+  const background = elements.backgroundInput.value;
+
+  elements.foregroundInput.value = background;
+  elements.backgroundInput.value = foreground;
+
+  updateContrast();
+}
+
 function initilizeApp() {
   state.colorHistory.push(...loadHistory());
   state.favoriteColors.push(...loadFavorites());
@@ -276,5 +286,7 @@ elements.foregroundInput.addEventListener("input", updateContrast);
 elements.backgroundInput.addEventListener("input", updateContrast);
 
 elements.contrastUseCurrent.addEventListener("click", handleUseCurrentColor);
+
+elements.contrastSwap.addEventListener("click", handleSwapContrastColors);
 
 initilizeApp();

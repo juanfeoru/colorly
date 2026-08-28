@@ -39,6 +39,8 @@ export const elements = {
 
   contrastUseCurrent: document.querySelector(".contrast-checker__use-current"),
 
+  contrastSwap: document.querySelector(".contrast-checker__swap"),
+
   contrastForegroundValue: document.getElementById("contrast-foreground-value"),
 
   contrastBackgroundValue: document.getElementById("contrast-background-value"),
