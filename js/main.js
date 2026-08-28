@@ -88,6 +88,7 @@ function handleGenerateColor() {
 
   updateUI();
   renderHistory(state.colorHistory, elements.historyList);
+  handleGeneratePalette();
 }
 
 async function copyColor() {
@@ -232,6 +233,16 @@ function updateContrast() {
   updateContrastUI(elements, foreground, background, ratio, wcag);
 }
 
+function initilizeApp() {
+  state.colorHistory.push(...loadHistory());
+  state.favoriteColors.push(...loadFavorites());
+
+  updateUI();
+  renderHistory(state.colorHistory, elements.historyList);
+  renderFavorites(state.favoriteColors, elements.favoritesList);
+  handleGeneratePalette();
+}
+
 elements.historyClear.addEventListener("click", handleClearHistory);
 
 elements.historyList.addEventListener("click", handleHistorySelection);
@@ -241,6 +252,8 @@ elements.generateButton.addEventListener("click", handleGenerateColor);
 elements.copyButton.addEventListener("click", copyColor);
 
 elements.paletteGenerateButton.addEventListener("click", handleGeneratePalette);
+
+elements.paletteType.addEventListener("change", handleGeneratePalette);
 
 elements.paletteColorsContainer.addEventListener("click", copyPaletteColor);
 
@@ -254,11 +267,4 @@ elements.foregroundInput.addEventListener("input", updateContrast);
 
 elements.backgroundInput.addEventListener("input", updateContrast);
 
-state.colorHistory.push(...loadHistory());
-state.favoriteColors.push(...loadFavorites());
-
-updateUI();
-renderHistory(state.colorHistory, elements.historyList);
-renderFavorites(state.favoriteColors, elements.favoritesList);
-
-handleGeneratePalette();
+initilizeApp();
