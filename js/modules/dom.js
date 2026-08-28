@@ -30,8 +30,6 @@ export const elements = {
 
   paletteColorsContainer: document.querySelector(".palette-generator__colors"),
 
-  paletteGenerateButton: document.querySelector(".palette-generator__generate"),
-
   paletteCopyButton: document.querySelector(".palette-generator__copy"),
 
   paletteType: document.getElementById("palette-type"),

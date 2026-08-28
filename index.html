@@ -211,56 +211,6 @@
         </div>
       </section>
 
-      <section class="color-history">
-        <header class="color-header">
-          <div class="color-heading">
-            <h2 class="section-title">Recent Colors</h2>
-            <p class="section-description">History of generated palettes</p>
-          </div>
-
-          <button class="color-clear" type="button" id="color-history__clear">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7zm4 12H8v-9h2zm6 0h-2v-9h2zm.618-15L15 2H9L7.382 4H3v2h18V4z"
-              />
-            </svg>
-            <span>Clear History</span>
-          </button>
-        </header>
-
-        <div id="color-history__list" class="color-card__list"></div>
-      </section>
-
-      <section class="color-favorites">
-        <header class="color-header">
-          <div class="color-heading">
-            <h2 class="section-title">Favorite Colors</h2>
-            <p class="section-description">Your saved colors</p>
-          </div>
-
-          <button class="color-clear" type="button" id="color-favorites__clear">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7zm4 12H8v-9h2zm6 0h-2v-9h2zm.618-15L15 2H9L7.382 4H3v2h18V4z"
-              />
-            </svg>
-            <span>Clear Favorites</span>
-          </button>
-        </header>
-
-        <div id="color-favorites__list" class="color-card__list"></div>
-      </section>
-
       <section class="palette-generator">
         <header class="color-header">
           <div class="color-heading">
@@ -283,15 +233,9 @@
             </select>
           </div>
 
-          <div class="palette-generator__actions">
-            <button type="button" class="palette-generator__generate">
-              Generate Palette
-            </button>
-
-            <button type="button" class="palette-generator__copy">
-              Copy palette
-            </button>
-          </div>
+          <button type="button" class="palette-generator__copy">
+            Copy palette
+          </button>
         </div>
 
         <div class="palette-generator__colors">
@@ -510,6 +454,56 @@
             <span class="contrast-checker__criterion-status"> — </span>
           </div>
         </div>
+      </section>
+
+      <section class="color-history">
+        <header class="color-header">
+          <div class="color-heading">
+            <h2 class="section-title">Recent Colors</h2>
+            <p class="section-description">History of generated palettes</p>
+          </div>
+
+          <button class="color-clear" type="button" id="color-history__clear">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7zm4 12H8v-9h2zm6 0h-2v-9h2zm.618-15L15 2H9L7.382 4H3v2h18V4z"
+              />
+            </svg>
+            <span>Clear History</span>
+          </button>
+        </header>
+
+        <div id="color-history__list" class="color-card__list"></div>
+      </section>
+
+      <section class="color-favorites">
+        <header class="color-header">
+          <div class="color-heading">
+            <h2 class="section-title">Favorite Colors</h2>
+            <p class="section-description">Your saved colors</p>
+          </div>
+
+          <button class="color-clear" type="button" id="color-favorites__clear">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7zm4 12H8v-9h2zm6 0h-2v-9h2zm.618-15L15 2H9L7.382 4H3v2h18V4z"
+              />
+            </svg>
+            <span>Clear Favorites</span>
+          </button>
+        </header>
+
+        <div id="color-favorites__list" class="color-card__list"></div>
       </section>
     </main>
 

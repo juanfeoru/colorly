@@ -284,8 +284,6 @@ elements.generateButton.addEventListener("click", handleGenerateColor);
 
 elements.copyButton.addEventListener("click", copyColor);
 
-elements.paletteGenerateButton.addEventListener("click", handleGeneratePalette);
-
 elements.paletteType.addEventListener("change", handleGeneratePalette);
 
 elements.paletteColorsContainer.addEventListener("click", copyPaletteColor);

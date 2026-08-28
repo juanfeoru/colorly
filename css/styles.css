@@ -495,18 +495,6 @@
   background-size: 16px;
 }
 
-.palette-generator__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-
-  @media (min-width: 600px) {
-    flex-direction: row;
-    gap: 0.5rem;
-  }
-}
-
-.palette-generator__generate,
 .palette-generator__copy {
   width: 100%;
   padding: 0.5rem 1.25rem;
