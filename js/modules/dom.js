@@ -32,6 +32,8 @@ export const elements = {
 
   paletteGenerateButton: document.querySelector(".palette-generator__generate"),
 
+  paletteCopyButton: document.querySelector(".palette-generator__copy"),
+
   paletteType: document.getElementById("palette-type"),
 
   foregroundInput: document.getElementById("contrast-foreground"),

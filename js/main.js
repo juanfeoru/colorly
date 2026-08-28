@@ -251,6 +251,21 @@ function handleSwapContrastColors() {
   updateContrast();
 }
 
+async function copyPalette() {
+  const colors = [...elements.paletteColors]
+    .map((element) => element.dataset.color)
+    .filter(Boolean)
+    .join("\n");
+
+  if (!colors) return;
+
+  const copied = await copyToClipboard(colors);
+
+  if (!copied) return;
+
+  showToast(elements.toast, "Palette copied to clipboard");
+}
+
 function initilizeApp() {
   state.colorHistory.push(...loadHistory());
   state.favoriteColors.push(...loadFavorites());
@@ -288,5 +303,7 @@ elements.backgroundInput.addEventListener("input", updateContrast);
 elements.contrastUseCurrent.addEventListener("click", handleUseCurrentColor);
 
 elements.contrastSwap.addEventListener("click", handleSwapContrastColors);
+
+elements.paletteCopyButton.addEventListener("click", copyPalette);
 
 initilizeApp();
