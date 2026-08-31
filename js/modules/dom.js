@@ -62,4 +62,10 @@ export const elements = {
   ),
 
   criteria: document.querySelectorAll(".contrast-checker__criterion-status"),
+
+  imageInput: document.getElementById("image-upload"),
+
+  imagePreview: document.querySelector(".image-extractor__image"),
+
+  imagePalette: document.querySelector(".image-extractor__palette"),
 };

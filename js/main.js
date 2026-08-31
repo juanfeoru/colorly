@@ -10,6 +10,8 @@ import { showToast } from "./modules/toast.js";
 
 import { elements } from "./modules/dom.js";
 
+import { renderExtractedColors } from "./modules/image-ui.js";
+
 import {
   addToHistory,
   clearHistory,
@@ -50,6 +52,7 @@ import {
 import { checkWCAG, getContrastRatio } from "./modules/contrast.js";
 import { hexToRgb, rgbToHex } from "./modules/color-converter.js";
 import { updateContrastUI } from "./modules/contrast-ui.js";
+import { extractColors, getImagePixels } from "./modules/image-extractor.js";
 
 const colorUI = {
   colorDisplay: elements.colorDisplay,
@@ -266,6 +269,24 @@ async function copyPalette() {
   showToast(elements.toast, "Palette copied to clipboard");
 }
 
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const imageUrl = URL.createObjectURL(file);
+
+  elements.imagePreview.onload = () => {
+    const imageData = getImagePixels(elements.imagePreview);
+
+    const colors = extractColors(imageData, 6);
+
+    renderExtractedColors(colors, elements.imagePalette);
+  };
+
+  elements.imagePreview.src = imageUrl;
+}
+
 function initilizeApp() {
   state.colorHistory.push(...loadHistory());
   state.favoriteColors.push(...loadFavorites());
@@ -303,5 +324,7 @@ elements.contrastUseCurrent.addEventListener("click", handleUseCurrentColor);
 elements.contrastSwap.addEventListener("click", handleSwapContrastColors);
 
 elements.paletteCopyButton.addEventListener("click", copyPalette);
+
+elements.imageInput.addEventListener("change", handleImageUpload);
 
 initilizeApp();

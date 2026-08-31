@@ -351,6 +351,36 @@
         </div>
       </section>
 
+      <section class="image-extractor">
+        <header class="color-header">
+          <div class="color-heading">
+            <h2 class="section-title">Image Colors</h2>
+            <p class="section-description">
+              Extract a color palette from an image
+            </p>
+          </div>
+        </header>
+
+        <div class="image-extractor__upload">
+          <label for="image-upload" class="image-extractor__upload-label">
+            <span>Choose an image</span>
+            <span>PNG, JPG or WEBP</span>
+          </label>
+
+          <input
+            type="file"
+            id="image-upload"
+            accept="image/png, image/jpeg, image/webp"
+          />
+        </div>
+
+        <div class="image-extractor__preview">
+          <img class="image-extractor__image" alt="Uploaded image preview" />
+        </div>
+
+        <div class="image-extractor__palette"></div>
+      </section>
+
       <section class="contrast-checker">
         <header class="color-header">
           <div class="color-heading">
