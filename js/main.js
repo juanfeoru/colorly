@@ -287,6 +287,20 @@ function handleImageUpload(event) {
   elements.imagePreview.src = imageUrl;
 }
 
+async function copyExtractedColor(event) {
+  const button = event.target.closest(".image-extractor__color");
+
+  if (!button) return;
+
+  const color = button.dataset.color;
+
+  const copied = await copyToClipboard(color);
+
+  if (!copied) return;
+
+  showToast(elements.toast, "Color copied to clipboard");
+}
+
 function initilizeApp() {
   state.colorHistory.push(...loadHistory());
   state.favoriteColors.push(...loadFavorites());
@@ -326,5 +340,7 @@ elements.contrastSwap.addEventListener("click", handleSwapContrastColors);
 elements.paletteCopyButton.addEventListener("click", copyPalette);
 
 elements.imageInput.addEventListener("change", handleImageUpload);
+
+elements.imagePalette.addEventListener("click", copyExtractedColor);
 
 initilizeApp();
